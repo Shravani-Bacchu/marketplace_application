@@ -1,135 +1,169 @@
-  import 'package:material_ui/material_ui.dart';
+// ignore_for_file: library_private_types_in_public_api
 
-/// Flutter code sample for [NavigationBar].
+import 'package:material_ui/material_ui.dart';
 
-void main() => runApp(const NavigationBarApp());
+void main() {
+  runApp(MyApp());
+}
 
-class NavigationBarApp extends StatelessWidget {
-  const NavigationBarApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: NavigationExample());
+    return MaterialApp(
+      title: 'MarketPlace Application',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginPage(),
+    );
   }
 }
 
-class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<NavigationExample> createState() => _NavigationExampleState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _NavigationExampleState extends State<NavigationExample> {
-  int currentPageIndex = 0;
+class _LoginPageState extends State<LoginPage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  // Controls password visibility
+  bool _obscureText = true;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: Colors.amber,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Discover',
-          ),
-          NavigationDestination(
-            icon: Badge(child: Icon(Icons.search)),
-            label: 'Browse',
-          ),
-          NavigationDestination(
-            icon: Badge(label: Text('2'), child: Icon(Icons.favorite)),
-            label: 'Favourites',
-          ),
-        ],
-      ),
-      body: <Widget>[
-        /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const .all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: Text('Discover Page', style: theme.textTheme.titleLarge),
-            ),
-          ),
-        ),
-
-        /// Notifications page
-        const Padding(
-          padding: .all(8.0),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
           child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Welcome',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
+                  color: Color(0xFF1C1C1C),
                 ),
               ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
+
+              SizedBox(height: 6),
+
+              Text(
+                'Sign In to continue',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
+                  color: Color(0xFF1C1C1C),
+                ),
+              ),
+
+              SizedBox(height: 26),
+
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
+              SizedBox(height: 16),
+
+              // Password field with visibility toggle
+              TextFormField(
+                controller: _passwordController,
+                obscureText: _obscureText,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 26),
+
+              SizedBox(
+                width: double.infinity,
+                height: 49,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle login
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF3B62FF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 26),
+
+              Center(
+                child: Text(
+                  'Forgot Password?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF87879D),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 10),
+
+              Center(
+                child: Text(
+                  "Don't have an account? Sign Up",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: Color(0xFF87879D),
+                  ),
                 ),
               ),
             ],
           ),
         ),
-
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: .centerRight,
-                child: Container(
-                  margin: const .all(8.0),
-                  padding: const .all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: .circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: .centerLeft,
-              child: Container(
-                margin: const .all(8.0),
-                padding: const .all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: .circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ][currentPageIndex],
+      ),
     );
   }
 }
